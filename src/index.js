@@ -30,13 +30,16 @@ function displayImages(images) {
 function fetchBreeds() {
     fetch(breedUrl)
         .then(resp => resp.json())
-        .then(res => displayBreeds(res["message"]))
+        .then(res => {
+            breedsList = Object.keys(res["message"])
+            displayBreeds(breedsList)
+        })
 }
 
 function displayBreeds(breeds) {
     const breedContainer = document.getElementById('dog-breeds')
-    breedsList = Object.keys(breeds)
-    for (breed of breedsList) {
+    
+    for (breed of breeds) {
         breedItem = document.createElement('li')
         breedItem.innerText = breed
         breedItem.addEventListener('click', changeBreedTextColor)
@@ -53,11 +56,6 @@ function handleDropdown(e) {
     filteredBreeds = breedsList.filter(breed => { return breed.startsWith(letter) })
     const breedContainer = document.getElementById('dog-breeds')
     breedContainer.innerHTML = ''
-    for (breed of filteredBreeds) {
-        breedItem = document.createElement('li')
-        breedItem.innerText = breed
-        breedItem.addEventListener('click', changeBreedTextColor)
-        breedContainer.appendChild(breedItem)
-    }
+    displayBreeds(filteredBreeds)
 }
 
